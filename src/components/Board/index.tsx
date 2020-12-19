@@ -4,16 +4,27 @@ import Cell from "../Cell";
 import Block from "../Block";
 import "./Board.css";
 
-type Props = {
-  message: string;
+const BOARD_SIZE: number = 10;
+
+const initBoard = () => {
+  const board = [];
+  for (let i = 0; i < BOARD_SIZE; i++) {
+    board.push(new Array(BOARD_SIZE).fill(0));
+  }
+  return board;
 };
 
-const Board: React.FC<Props> = (props) => {
+const Board: React.FC = () => {
+  const board = initBoard();
   return (
     <div className="board">
-      <Cell>
-        <Block color="green" />
-      </Cell>
+      {board.map((row) => (
+        <div className="row">
+          {row.map(() => (
+            <Cell />
+          ))}
+        </div>
+      ))}
     </div>
   );
 };
