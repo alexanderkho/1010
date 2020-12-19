@@ -1,7 +1,8 @@
 import * as React from "react";
 
-import Cell from "./Cell";
-import Block from "./Block";
+import Cell from "../Cell";
+import Block from "../Block";
+import "./Board.css";
 
 type Props = {
   message: string;
@@ -9,9 +10,10 @@ type Props = {
 
 const Board: React.FC<Props> = (props) => {
   return (
-    <div>
-      <p>{props.message}</p>
-      <Cell></Cell>
+    <div className="board">
+      <Cell>
+        <Block color="green" />
+      </Cell>
     </div>
   );
 };
