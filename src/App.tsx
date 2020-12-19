@@ -5,7 +5,7 @@ import Board from "./components/Board";
 function App() {
   return (
     <div className="App">
-      <Board message={"beep"} />
+      <Board message={"beeeeep"} />
     </div>
   );
 }
