@@ -3,7 +3,7 @@ import { T_Piece } from "../Pieces";
 type T_Pos = [number, number];
 
 type T_Cell = {
-  parentPiece: T_Piece | null;
+  piece: T_Piece | null;
   pos: T_Pos;
 };
 

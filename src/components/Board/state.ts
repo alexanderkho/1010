@@ -2,26 +2,28 @@ import { T_Piece } from "../Pieces";
 import { T_Board, T_Pos, T_Row } from "./BoardTypes";
 
 const ADD_PIECE = "ADD_PIECE";
-const CLEAR_LINE = "CLEAR_LINE";
+const CLEAR_ROW = "CLEAR_ROW";
+const CLEAR_COL = "CLEAR_COL";
 
-type T_Line = "row" | "col";
-
-type addPieceAction = {
+type T_AddPiece = {
   type: typeof ADD_PIECE;
   pieceName: T_Piece;
   pos: T_Pos;
 };
 
-//TODO: probably split this into CLEAR_ROW and CLEAR_COL
-type clearLineAction = {
-  type: typeof CLEAR_LINE;
-  lineType: T_Line;
+type T_ClearRow = {
+  type: typeof CLEAR_ROW;
   index: number;
 };
 
-type actionTypes = addPieceAction | clearLineAction;
+type T_ClearCol = {
+  type: typeof CLEAR_COL;
+  index: number;
+};
 
-const addPiece = (pieceName: T_Piece, pos: T_Pos): addPieceAction => {
+type actionTypes = T_AddPiece | T_ClearRow | T_ClearCol;
+
+const addPiece = (pieceName: T_Piece, pos: T_Pos): T_AddPiece => {
   return {
     type: ADD_PIECE,
     pieceName,
@@ -29,10 +31,16 @@ const addPiece = (pieceName: T_Piece, pos: T_Pos): addPieceAction => {
   };
 };
 
-const clearLine = (lineType: T_Line, index: number): clearLineAction => {
+const clearRow = (index: number): T_ClearRow => {
   return {
-    type: CLEAR_LINE,
-    lineType,
+    type: CLEAR_ROW,
+    index,
+  };
+};
+
+const clearCol = (index: number): T_ClearCol => {
+  return {
+    type: CLEAR_COL,
     index,
   };
 };
@@ -46,12 +54,15 @@ const boardReducer = (state: T_Board, action: actionTypes): T_Board => {
       const newRow: T_Row = [...state[updateRow]];
       newRow[updateCol] = {
         ...newRow[updateCol],
-        parentPiece: pieceName,
+        piece: pieceName,
       };
       newBoard[updateRow] = newRow;
       return newBoard;
-    case CLEAR_LINE:
-      console.log("clearing line: ", action);
+    case CLEAR_ROW:
+      console.log("clearing row ", action.index);
+      return state;
+    case CLEAR_COL:
+      console.log("clearing col ", action.index);
       return state;
     default:
       return state;
@@ -59,4 +70,4 @@ const boardReducer = (state: T_Board, action: actionTypes): T_Board => {
 };
 
 export default boardReducer;
-export { addPiece, clearLine };
+export { addPiece, clearRow, clearCol };

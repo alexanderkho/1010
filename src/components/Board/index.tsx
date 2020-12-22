@@ -5,7 +5,7 @@ import Block from "../Block";
 import { T_Pos } from "./BoardTypes";
 import { BitMaps, T_Piece } from "../Pieces";
 import initBoard from "./initBoard";
-import boardReducer, { addPiece, clearLine } from "./state";
+import boardReducer, { addPiece, clearRow, clearCol } from "./state";
 import "./Board.css";
 
 const Board: React.FC = () => {
@@ -16,8 +16,8 @@ const Board: React.FC = () => {
     const cols = new Array(board.length).fill(true);
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board.length; j++) {
-        const piece = board[i][j];
-        if (!piece.parentPiece) {
+        const cell = board[i][j];
+        if (!cell.piece) {
           rows[i] = false;
           cols[j] = false;
         }
@@ -25,12 +25,12 @@ const Board: React.FC = () => {
     }
     rows.forEach((rowFilled, i) => {
       if (rowFilled) {
-        dispatch(clearLine("row", i));
+        dispatch(clearRow(i));
       }
     });
     cols.forEach((colFilled, j) => {
       if (colFilled) {
-        dispatch(clearLine("col", j));
+        dispatch(clearCol(j));
       }
     });
   };
@@ -47,7 +47,7 @@ const Board: React.FC = () => {
       for (let j = 0; j < piece[i].length; j++) {
         if (piece[i][j]) {
           const originPiece = board[originRow + i]?.[originCol + j];
-          if (!originPiece || originPiece.parentPiece) {
+          if (!originPiece || originPiece.piece) {
             return false;
           }
         }
@@ -77,7 +77,7 @@ const Board: React.FC = () => {
         <div className="row" key={i}>
           {row.map((cell, j) => (
             <Cell onClick={() => _addPiece("Square", cell.pos)} key={j}>
-              {cell.parentPiece ? <Block piece={cell.parentPiece} /> : null}
+              {cell.piece ? <Block piece={cell.piece} /> : null}
             </Cell>
           ))}
         </div>

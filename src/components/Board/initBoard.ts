@@ -8,7 +8,7 @@ const initBoard: () => T_Board = function () {
     const row: T_Row = [];
     for (let j = 0; j < BOARD_SIZE; j++) {
       const cell: T_Cell = {
-        parentPiece: null,
+        piece: null,
         pos: [i, j], //[ row, col ]
       };
       row.push(cell);
