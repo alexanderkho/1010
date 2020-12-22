@@ -24,12 +24,25 @@ const Board: React.FC = () => {
     });
   };
 
-  const isValidPlacement = (pos: T_Pos) => {
+  //TODO: this + addPiece is !DRY AKA WET
+  const isValidPlacement = (pieceName: T_Piece, origin: T_Pos) => {
+    const [originRow, originCol] = origin;
+    const piece = BitMaps[pieceName];
+    for (let i = 0; i < piece.length; i++) {
+      for (let j = 0; j < piece[i].length; j++) {
+        if (piece[i][j]) {
+          const originPiece = board[originRow + i]?.[originCol + j];
+          if (!originPiece || originPiece.parentPiece) {
+            return false;
+          }
+        }
+      }
+    }
     return true;
   };
 
   const addPiece = (pieceName: T_Piece, origin: T_Pos) => {
-    if (!isValidPlacement(origin)) {
+    if (!isValidPlacement(pieceName, origin)) {
       return;
     }
     const [originRow, originCol] = origin;
