@@ -1,15 +1,23 @@
 import * as React from "react";
 
+import { T_Piece, Colors } from "../Pieces";
 import "./Block.css";
 
 type Props = {
-  color: "blue" | "red" | "orange" | "green";
+  piece: T_Piece;
 };
 
-const Block: React.FC<Props> = ({ color }: Props) => {
-  const style = {
-    backgroundColor: color,
-  };
+const Block: React.FC<Props> = ({ piece }: Props) => {
+  let style;
+  if (piece) {
+    style = {
+      backgroundColor: Colors[piece],
+    };
+  } else {
+    style = {
+      display: "none",
+    };
+  }
   return <div style={style} className="block" />;
 };
 
