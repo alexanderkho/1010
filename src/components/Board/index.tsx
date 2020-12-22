@@ -35,6 +35,7 @@ const Board: React.FC = () => {
     });
   };
 
+  //TODO: leaving checkForFilledLines out of dep array throws a warning
   React.useEffect(() => {
     checkForFilledLines();
   }, [board]);

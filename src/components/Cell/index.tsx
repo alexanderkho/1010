@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { T_Pos } from "../Board/BoardTypes";
 import "./Cell.css";
 
 type Props = {

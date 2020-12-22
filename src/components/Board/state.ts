@@ -45,13 +45,15 @@ const clearCol = (index: number): T_ClearCol => {
   };
 };
 
+//TODO: some of this logic could be cleaned up.
 const boardReducer = (state: T_Board, action: actionTypes): T_Board => {
+  let newBoard: T_Board, newRow: T_Row;
   switch (action.type) {
     case ADD_PIECE:
       const { pieceName, pos } = action;
       const [updateRow, updateCol] = pos;
-      const newBoard: T_Board = [...state];
-      const newRow: T_Row = [...state[updateRow]];
+      newBoard = [...state];
+      newRow = [...state[updateRow]];
       newRow[updateCol] = {
         ...newRow[updateCol],
         piece: pieceName,
@@ -59,11 +61,17 @@ const boardReducer = (state: T_Board, action: actionTypes): T_Board => {
       newBoard[updateRow] = newRow;
       return newBoard;
     case CLEAR_ROW:
-      console.log("clearing row ", action.index);
-      return state;
+      newBoard = [...state];
+      newRow = [...state[action.index]];
+      newRow.forEach((cell) => (cell.piece = null));
+      newBoard[action.index] = newRow;
+      return newBoard;
     case CLEAR_COL:
-      console.log("clearing col ", action.index);
-      return state;
+      newBoard = [...state];
+      newBoard.forEach((row) => {
+        row[action.index].piece = null;
+      });
+      return newBoard;
     default:
       return state;
   }
