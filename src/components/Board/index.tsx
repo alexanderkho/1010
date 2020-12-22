@@ -2,27 +2,10 @@ import * as React from "react";
 
 import Cell from "../Cell";
 import Block from "../Block";
-import { T_Board, T_Cell, T_Row, T_Pos } from "./BoardTypes";
+import { T_Board, T_Row, T_Pos } from "./BoardTypes";
 import { BitMaps, T_Piece } from "../Pieces";
+import initBoard from "./initBoard";
 import "./Board.css";
-
-const BOARD_SIZE: number = 10;
-
-const initBoard: () => T_Board = function () {
-  const board: T_Board = [];
-  for (let i = 0; i < BOARD_SIZE; i++) {
-    const row: T_Row = [];
-    for (let j = 0; j < BOARD_SIZE; j++) {
-      const cell: T_Cell = {
-        parentPiece: null,
-        pos: [i, j], //[ row, col ]
-      };
-      row.push(cell);
-    }
-    board.push(row);
-  }
-  return board;
-};
 
 const Board: React.FC = () => {
   const [board, setBoard] = React.useState(initBoard());
@@ -65,7 +48,7 @@ const Board: React.FC = () => {
       {board.map((row, i) => (
         <div className="row" key={i}>
           {row.map((cell, j) => (
-            <Cell onClick={() => addPiece("Square", cell.pos)} key={j}>
+            <Cell onClick={() => addPiece("RLeft", cell.pos)} key={j}>
               {cell.parentPiece ? <Block piece={cell.parentPiece} /> : null}
             </Cell>
           ))}

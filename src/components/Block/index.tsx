@@ -13,10 +13,6 @@ const Block: React.FC<Props> = ({ piece }: Props) => {
     style = {
       backgroundColor: Colors[piece],
     };
-  } else {
-    style = {
-      display: "none",
-    };
   }
   return <div style={style} className="block" />;
 };
