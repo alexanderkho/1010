@@ -2,13 +2,14 @@ import * as React from "react";
 
 import Cell from "../Cell";
 import Block from "../Block";
-import { T_Board, T_Row, T_Pos } from "./BoardTypes";
+import { T_Pos } from "./BoardTypes";
 import { BitMaps, T_Piece } from "../Pieces";
 import initBoard from "./initBoard";
+import boardReducer, { addPiece, clearLine } from "./state";
 import "./Board.css";
 
 const Board: React.FC = () => {
-  const [board, setBoard] = React.useState(initBoard());
+  const [board, dispatch] = React.useReducer(boardReducer, initBoard());
 
   const checkForFilledLines = () => {
     const rows = new Array(board.length).fill(true);
@@ -24,36 +25,19 @@ const Board: React.FC = () => {
     }
     rows.forEach((rowFilled, i) => {
       if (rowFilled) {
-        //TODO
-        console.log("clearing row ", i);
+        dispatch(clearLine("row", i));
       }
     });
     cols.forEach((colFilled, j) => {
       if (colFilled) {
-        //TODO
-        console.log("clearing col ", j);
+        dispatch(clearLine("col", j));
       }
     });
   };
 
   React.useEffect(() => {
-    console.log("checking for filled lines...");
     checkForFilledLines();
   }, [board]);
-
-  const updateBoard = (pieceName: T_Piece, pos: T_Pos) => {
-    setBoard((prev) => {
-      const [updateRow, updateCol] = pos;
-      const newBoard: T_Board = [...prev];
-      const newRow: T_Row = [...prev[updateRow]];
-      newRow[updateCol] = {
-        ...newRow[updateCol],
-        parentPiece: pieceName,
-      };
-      newBoard[updateRow] = newRow;
-      return newBoard;
-    });
-  };
 
   //TODO: this + addPiece is !DRY AKA WET
   const isValidPlacement = (pieceName: T_Piece, origin: T_Pos) => {
@@ -72,7 +56,7 @@ const Board: React.FC = () => {
     return true;
   };
 
-  const addPiece = (pieceName: T_Piece, origin: T_Pos) => {
+  const _addPiece = (pieceName: T_Piece, origin: T_Pos) => {
     if (!isValidPlacement(pieceName, origin)) {
       return;
     }
@@ -81,7 +65,7 @@ const Board: React.FC = () => {
     for (let i = 0; i < piece.length; i++) {
       for (let j = 0; j < piece[i].length; j++) {
         if (piece[i][j]) {
-          updateBoard(pieceName, [i + originRow, j + originCol]);
+          dispatch(addPiece(pieceName, [i + originRow, j + originCol]));
         }
       }
     }
@@ -92,7 +76,7 @@ const Board: React.FC = () => {
       {board.map((row, i) => (
         <div className="row" key={i}>
           {row.map((cell, j) => (
-            <Cell onClick={() => addPiece("Square", cell.pos)} key={j}>
+            <Cell onClick={() => _addPiece("Square", cell.pos)} key={j}>
               {cell.parentPiece ? <Block piece={cell.parentPiece} /> : null}
             </Cell>
           ))}
