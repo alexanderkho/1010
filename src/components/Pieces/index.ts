@@ -1,7 +1,7 @@
 const Pieces = {
   Square: "Square",
   Line: "Line",
-  RLeft: "R_Left",
+  RLeft: "RLeft",
 };
 
 type T_Piece = keyof typeof Pieces;
@@ -33,5 +33,12 @@ const BitMaps = {
   RLeft: BM_RLeft,
 };
 
-export { Pieces, Colors, BitMaps };
+//TODO: Find a cleaner way to handle piece typings so we don't need to typecast here
+const getRandomPiece = (): T_Piece => {
+  const keys = Object.keys(Pieces) as Array<T_Piece>;
+  const p = Pieces[keys[(keys.length * Math.random()) << 0]] as T_Piece;
+  return p;
+};
+
+export { Pieces, Colors, BitMaps, getRandomPiece };
 export type { T_Piece, T_BitMap };

@@ -3,13 +3,21 @@ import * as React from "react";
 import Cell from "../Cell";
 import Block from "../Block";
 import { T_Pos } from "./BoardTypes";
-import { BitMaps, T_Piece } from "../Pieces";
+import { BitMaps, T_Piece, getRandomPiece } from "../Pieces";
 import initBoard from "./initBoard";
 import boardReducer, { addPiece, clearRow, clearCol } from "./state";
 import "./Board.css";
 
 const Board: React.FC = () => {
   const [board, dispatch] = React.useReducer(boardReducer, initBoard());
+  // const [pieceQueue, setPieceQueue] = React.useState<Array<T_Piece>>([]);
+
+  // //game loop
+  // React.useEffect(() => {
+  //   if (!pieceQueue.length) {
+
+  //   }
+  // }, [board, pieceQueue]);
 
   //check for filled lines
   React.useEffect(() => {
@@ -73,7 +81,7 @@ const Board: React.FC = () => {
       {board.map((row, i) => (
         <div className="row" key={i}>
           {row.map((cell, j) => (
-            <Cell onClick={() => _addPiece("Square", cell.pos)} key={j}>
+            <Cell onClick={() => _addPiece(getRandomPiece(), cell.pos)} key={j}>
               {cell.piece ? <Block piece={cell.piece} /> : null}
             </Cell>
           ))}
