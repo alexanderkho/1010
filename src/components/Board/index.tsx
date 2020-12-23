@@ -11,7 +11,8 @@ import "./Board.css";
 const Board: React.FC = () => {
   const [board, dispatch] = React.useReducer(boardReducer, initBoard());
 
-  const checkForFilledLines = () => {
+  //check for filled lines
+  React.useEffect(() => {
     const rows = new Array(board.length).fill(true);
     const cols = new Array(board.length).fill(true);
     for (let i = 0; i < board.length; i++) {
@@ -33,11 +34,6 @@ const Board: React.FC = () => {
         dispatch(clearCol(j));
       }
     });
-  };
-
-  //TODO: leaving checkForFilledLines out of dep array throws a warning
-  React.useEffect(() => {
-    checkForFilledLines();
   }, [board]);
 
   //TODO: this + addPiece is !DRY AKA WET
