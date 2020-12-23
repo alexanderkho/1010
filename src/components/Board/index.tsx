@@ -3,21 +3,15 @@ import * as React from "react";
 import Cell from "../Cell";
 import Block from "../Block";
 import { T_Pos } from "./BoardTypes";
-import { BitMaps, T_Piece, getRandomPiece } from "../Pieces";
+import { BitMaps, T_Piece } from "../Pieces";
 import initBoard from "./initBoard";
 import boardReducer, { addPiece, clearRow, clearCol } from "./state";
+import { useGameRounds } from "../../game";
 import "./Board.css";
 
 const Board: React.FC = () => {
   const [board, dispatch] = React.useReducer(boardReducer, initBoard());
-  // const [pieceQueue, setPieceQueue] = React.useState<Array<T_Piece>>([]);
-
-  // //game loop
-  // React.useEffect(() => {
-  //   if (!pieceQueue.length) {
-
-  //   }
-  // }, [board, pieceQueue]);
+  const [round, next] = useGameRounds();
 
   //check for filled lines
   React.useEffect(() => {
@@ -61,19 +55,21 @@ const Board: React.FC = () => {
     return true;
   };
 
-  const _addPiece = (pieceName: T_Piece, origin: T_Pos) => {
-    if (!isValidPlacement(pieceName, origin)) {
+  const playPiece = (origin: T_Pos) => {
+    const nextPiece = round[round.length - 1];
+    if (!isValidPlacement(nextPiece, origin)) {
       return;
     }
     const [originRow, originCol] = origin;
-    const piece = BitMaps[pieceName];
+    const piece = BitMaps[nextPiece];
     for (let i = 0; i < piece.length; i++) {
       for (let j = 0; j < piece[i].length; j++) {
         if (piece[i][j]) {
-          dispatch(addPiece(pieceName, [i + originRow, j + originCol]));
+          dispatch(addPiece(nextPiece, [i + originRow, j + originCol]));
         }
       }
     }
+    next();
   };
 
   return (
@@ -81,12 +77,22 @@ const Board: React.FC = () => {
       {board.map((row, i) => (
         <div className="row" key={i}>
           {row.map((cell, j) => (
-            <Cell onClick={() => _addPiece(getRandomPiece(), cell.pos)} key={j}>
+            <Cell onClick={() => playPiece(cell.pos)} key={j}>
               {cell.piece ? <Block piece={cell.piece} /> : null}
             </Cell>
           ))}
         </div>
       ))}
+      {round && (
+        <div>
+          <p>Current Round</p>
+          <ul>
+            {round.map((p, i) => (
+              <li key={i}>{p}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
