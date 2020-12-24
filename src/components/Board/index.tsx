@@ -3,7 +3,7 @@ import * as React from "react";
 import Cell from "../Cell";
 import Block from "../Block";
 import { T_Pos } from "./BoardTypes";
-import { BitMaps, T_Piece } from "../Pieces";
+import { BitMaps, T_Piece, T_BitMap } from "../Pieces";
 import initBoard from "./initBoard";
 import boardReducer, { addPiece, clearRow, clearCol } from "./state";
 import { useGameRounds } from "../../game";
@@ -39,9 +39,8 @@ const Board: React.FC = () => {
   }, [board]);
 
   //TODO: this + addPiece is !DRY AKA WET
-  const isValidPlacement = (pieceName: T_Piece, origin: T_Pos) => {
+  const isValidPlacement = (piece: T_BitMap, origin: T_Pos) => {
     const [originRow, originCol] = origin;
-    const piece = BitMaps[pieceName];
     for (let i = 0; i < piece.length; i++) {
       for (let j = 0; j < piece[i].length; j++) {
         if (piece[i][j]) {
@@ -57,15 +56,15 @@ const Board: React.FC = () => {
 
   const playPiece = (origin: T_Pos) => {
     const nextPiece = round[round.length - 1];
-    if (!isValidPlacement(nextPiece, origin)) {
+    const { bitmap } = nextPiece;
+    if (!isValidPlacement(bitmap, origin)) {
       return;
     }
     const [originRow, originCol] = origin;
-    const piece = BitMaps[nextPiece];
-    for (let i = 0; i < piece.length; i++) {
-      for (let j = 0; j < piece[i].length; j++) {
-        if (piece[i][j]) {
-          dispatch(addPiece(nextPiece, [i + originRow, j + originCol]));
+    for (let i = 0; i < bitmap.length; i++) {
+      for (let j = 0; j < bitmap[i].length; j++) {
+        if (bitmap[i][j]) {
+          dispatch(addPiece(nextPiece.name, [i + originRow, j + originCol]));
         }
       }
     }
@@ -88,7 +87,11 @@ const Board: React.FC = () => {
           <p>Current Round</p>
           <ul>
             {round.map((p, i) => (
-              <li key={i}>{p}</li>
+              <li key={i}>
+                <span className={i === round.length - 1 ? "active" : ""}>
+                  {JSON.stringify(p)}
+                </span>
+              </li>
             ))}
           </ul>
         </div>
