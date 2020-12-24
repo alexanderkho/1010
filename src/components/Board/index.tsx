@@ -6,13 +6,13 @@ import { T_Pos } from "./BoardTypes";
 import { BitMaps, T_Piece, T_BitMap } from "../Pieces";
 import initBoard from "./initBoard";
 import boardReducer, { addPiece, clearRow, clearCol } from "./state";
-import { useGameRounds } from "../../game";
+import { usePieceQueue } from "../../game";
 import "./Board.css";
 import renderBoard from "./renderBoard";
 
 const Board: React.FC = () => {
   const [board, dispatch] = React.useReducer(boardReducer, initBoard());
-  const [round, next] = useGameRounds();
+  const [queue, next] = usePieceQueue();
 
   //check for filled lines
   React.useEffect(() => {
@@ -56,7 +56,7 @@ const Board: React.FC = () => {
   };
 
   const playPiece = (origin: T_Pos) => {
-    const nextPiece = round[round.length - 1];
+    const nextPiece = queue[queue.length - 1];
     const { bitmap } = nextPiece;
     if (!isValidPlacement(bitmap, origin)) {
       return;
@@ -75,13 +75,13 @@ const Board: React.FC = () => {
   return (
     <div className="board">
       {renderBoard(board, playPiece)}
-      {round && (
+      {queue && (
         <div>
-          <p>Current Round</p>
+          <p>Current queue</p>
           <ul>
-            {round.map((p, i) => (
+            {queue.map((p, i) => (
               <li key={i}>
-                <span className={i === round.length - 1 ? "active" : ""}>
+                <span className={i === queue.length - 1 ? "active" : ""}>
                   {JSON.stringify(p)}
                 </span>
               </li>

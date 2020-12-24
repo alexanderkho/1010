@@ -9,7 +9,7 @@ import {
   BitMaps,
 } from "../components/Pieces";
 
-const PIECES_PER_ROUND = 3;
+const QUEUE_SIZE = 3;
 
 type T_PieceData = {
   name: T_Piece;
@@ -17,14 +17,14 @@ type T_PieceData = {
   rotation: T_Rotation;
 };
 
-type T_Round = T_PieceData[];
+type T_QUEUE = T_PieceData[];
 
-const useGameRounds = (): [T_Round, () => void] => {
-  const [round, setRound] = React.useState<T_Round>([]);
+const usePieceQueue = (): [T_QUEUE, () => void] => {
+  const [queue, setQueue] = React.useState<T_QUEUE>([]);
   React.useEffect(() => {
-    if (!round.length) {
-      const newRound: T_Round = [];
-      for (let i = 0; i < PIECES_PER_ROUND; i++) {
+    if (!queue.length) {
+      const newQueue: T_QUEUE = [];
+      for (let i = 0; i < QUEUE_SIZE; i++) {
         const rotation = Math.floor(Math.random() * 4) as T_Rotation;
         const pieceName = getRandomPiece();
         const piece: T_PieceData = {
@@ -32,21 +32,21 @@ const useGameRounds = (): [T_Round, () => void] => {
           bitmap: rotatePiece(BitMaps[pieceName], rotation),
           rotation,
         };
-        newRound.push(piece);
+        newQueue.push(piece);
       }
-      setRound(newRound);
+      setQueue(newQueue);
     }
-  }, [round]);
+  }, [queue]);
 
   const next = () =>
-    setRound((prev) => {
-      const newRound: T_Round = [...prev];
-      newRound.pop();
-      return newRound;
+    setQueue((prev) => {
+      const newQueue: T_QUEUE = [...prev];
+      newQueue.pop();
+      return newQueue;
     });
 
-  return [round, next];
+  return [queue, next];
 };
 
-export { useGameRounds };
-export type { T_Round };
+export { usePieceQueue };
+export type { T_QUEUE };
