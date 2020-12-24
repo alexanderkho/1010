@@ -8,6 +8,7 @@ import initBoard from "./initBoard";
 import boardReducer, { addPiece, clearRow, clearCol } from "./state";
 import { useGameRounds } from "../../game";
 import "./Board.css";
+import renderBoard from "./renderBoard";
 
 const Board: React.FC = () => {
   const [board, dispatch] = React.useReducer(boardReducer, initBoard());
@@ -73,15 +74,7 @@ const Board: React.FC = () => {
 
   return (
     <div className="board">
-      {board.map((row, i) => (
-        <div className="row" key={i}>
-          {row.map((cell, j) => (
-            <Cell onClick={() => playPiece(cell.pos)} key={j}>
-              {cell.piece ? <Block piece={cell.piece} /> : null}
-            </Cell>
-          ))}
-        </div>
-      ))}
+      {renderBoard(board, playPiece)}
       {round && (
         <div>
           <p>Current Round</p>

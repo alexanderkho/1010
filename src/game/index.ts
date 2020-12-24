@@ -49,3 +49,4 @@ const useGameRounds = (): [T_Round, () => void] => {
 };
 
 export { useGameRounds };
+export type { T_Round };

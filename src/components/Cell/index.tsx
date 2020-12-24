@@ -3,7 +3,7 @@ import * as React from "react";
 import "./Cell.css";
 
 type Props = {
-  onClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 };
 
 const Cell: React.FC<Props> = ({ children, onClick }) => {
