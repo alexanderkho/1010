@@ -1,9 +1,7 @@
 import * as React from "react";
 
-import Cell from "../Cell";
-import Block from "../Block";
 import { T_Pos } from "./BoardTypes";
-import { BitMaps, T_Piece, T_BitMap } from "../Pieces";
+import { T_BitMap, PiecePreview } from "../Pieces";
 import initBoard from "./initBoard";
 import boardReducer, { addPiece, clearRow, clearCol } from "./state";
 import { usePieceQueue } from "../../game";
@@ -72,19 +70,21 @@ const Board: React.FC = () => {
     next();
   };
 
+  const rQueue = [...queue].reverse();
   return (
     <div className="board">
-      {renderBoard(board, playPiece)}
-      {queue && (
-        <div>
+      <div>{renderBoard(board, playPiece)}</div>
+      {rQueue && (
+        <div className="piece-queue">
           <p>Current queue</p>
           <ul>
-            {queue.map((p, i) => (
-              <li key={i}>
-                <span className={i === queue.length - 1 ? "active" : ""}>
-                  {JSON.stringify(p)}
-                </span>
-              </li>
+            {rQueue.map((p, i) => (
+              <PiecePreview piece={p} key={i} />
+              // <li key={i}>
+              //   <span className={i === 0 ? "active" : ""}>
+              //     Piece: {p.name} {`${p.rotation * 90} degrees`}
+              //   </span>
+              // </li>
             ))}
           </ul>
         </div>

@@ -1,3 +1,5 @@
+import PiecePreview from "./PiecePreview";
+
 const Pieces = {
   Square: "Square",
   Line: "Line",
@@ -61,5 +63,5 @@ const getRandomPiece = (): T_Piece => {
   return p;
 };
 
-export { Pieces, Colors, BitMaps, getRandomPiece, rotatePiece };
+export { Pieces, Colors, BitMaps, getRandomPiece, rotatePiece, PiecePreview };
 export type { T_Piece, T_BitMap, T_Rotation };

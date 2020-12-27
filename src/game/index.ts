@@ -49,4 +49,4 @@ const usePieceQueue = (): [T_QUEUE, () => void] => {
 };
 
 export { usePieceQueue };
-export type { T_QUEUE };
+export type { T_QUEUE, T_PieceData };

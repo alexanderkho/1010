@@ -1,7 +1,6 @@
 import Cell from "../Cell";
 import { T_Board, T_Pos } from "./BoardTypes";
 import Block from "../Block";
-import { T_QUEUE } from "../../game";
 
 const renderBoard = (
   board: T_Board,
@@ -22,7 +21,7 @@ const renderBoard = (
   );
 };
 
-//TODO
+//TODO: see PiecePreview.tsx
 // const renderPieceQueue = (queue: T_Queue ): JSX.Element => {
 //   const queueBoard: T_Board = queue.map()
 // }
