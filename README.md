@@ -6,6 +6,7 @@ This project is meant to be a React clone of the popular mobile game [1010!](htt
 
 - Ability to drag and drop pieces
 - Ability to grab any piece from current queue
+- Add point tracking
 - Add more pieces
 - Improved design/styling
 
