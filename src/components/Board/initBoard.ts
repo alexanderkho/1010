@@ -1,4 +1,3 @@
-import { T_QUEUE } from "../../game";
 import { T_Board, T_Cell, T_Row } from "./BoardTypes";
 
 const BOARD_SIZE: number = 10;
@@ -18,7 +17,5 @@ const initBoard: () => T_Board = function () {
   }
   return board;
 };
-
-// const mapQueueToBoard = (queue: T_QUEUE):
 
 export default initBoard;
