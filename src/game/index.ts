@@ -48,5 +48,9 @@ const usePieceQueue = (): [T_QUEUE, () => void] => {
   return [queue, next];
 };
 
-export { usePieceQueue };
+const DragTypes = {
+  PIECE: "piece",
+};
+
+export { usePieceQueue, DragTypes };
 export type { T_QUEUE, T_PieceData };

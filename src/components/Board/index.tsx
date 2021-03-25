@@ -80,11 +80,6 @@ const Board: React.FC = () => {
           <ul>
             {rQueue.map((p, i) => (
               <PiecePreview piece={p} key={i} />
-              // <li key={i}>
-              //   <span className={i === 0 ? "active" : ""}>
-              //     Piece: {p.name} {`${p.rotation * 90} degrees`}
-              //   </span>
-              // </li>
             ))}
           </ul>
         </div>
