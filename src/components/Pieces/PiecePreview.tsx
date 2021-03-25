@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useDrag, DragElementWrapper, DragSourceOptions } from "react-dnd";
+import { useDrag } from "react-dnd";
 
 import { T_PieceData, DragTypes } from "../../game";
 import PreviewCell from "../Cell/PreviewCell";
@@ -10,18 +10,6 @@ import { T_Pos } from "../Board/BoardTypes";
 type Props = {
   piece: T_PieceData;
 };
-
-type T_DragRef = DragElementWrapper<DragSourceOptions> | null;
-
-type T_PreviewContext = {
-  dragRef: T_DragRef;
-  setDragRef: React.Dispatch<React.SetStateAction<T_DragRef>> | null;
-};
-
-const PreviewContext = React.createContext<T_PreviewContext>({
-  dragRef: null,
-  setDragRef: null,
-});
 
 //TODO: Find a way to do this with renderBoard
 const PiecePreview: React.FC<Props> = ({ piece }) => {
@@ -42,11 +30,6 @@ const PiecePreview: React.FC<Props> = ({ piece }) => {
   const updateDragOrigin = (origin: T_Pos | null): void => {
     setDragOrigin(origin);
   };
-
-  React.useEffect(() => {
-    console.log("isDragging: ", isDragging);
-    console.log("dragOrigin: ", dragOrigin);
-  });
 
   //TODO: Add onClick to cells to grab the cell that was selected
   //Then, onHover we can calculate if it is a valid placement based
@@ -71,5 +54,3 @@ const PiecePreview: React.FC<Props> = ({ piece }) => {
 };
 
 export default PiecePreview;
-export { PreviewContext };
-export type { T_DragRef, T_PreviewContext };
