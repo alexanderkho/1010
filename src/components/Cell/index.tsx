@@ -12,8 +12,14 @@ const Cell: React.FC<Props> = ({ children, onClick }) => {
   const [collected, drop] = useDrop(() => ({
     accept: DragTypes.PIECE,
     collect: (monitor) => ({
-      isHovering: monitor.isOver({ shallow: false }),
+      isHovering: monitor.isOver(),
     }),
+    drop: (item, monitor) => {
+      console.log(item);
+    },
+    canDrop: (item, monitor) => {
+      return true;
+    },
   }));
   return (
     <div

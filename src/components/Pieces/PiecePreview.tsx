@@ -13,10 +13,27 @@ type Props = {
 
 //TODO: Find a way to do this with renderBoard
 const PiecePreview: React.FC<Props> = ({ piece }) => {
-  // const [dragRef, setDragRef] = React.useState<T_DragRef>(null);
+  //FIXME: this fuckery with refs is a hacky workaround to access
+  //the dragRef inside of useDrag. If we try to access it directly
+  //we end up with a stale closure value
+  const [dragOrigin, setDragOrigin] = React.useState<T_Pos | null>(null);
+  const updateDragOrigin = (origin: T_Pos | null): void => {
+    setDragOrigin(origin);
+  };
+  const dragOriginRef = React.useRef(dragOrigin);
+
+  React.useEffect(() => {
+    dragOriginRef.current = dragOrigin;
+  }, [dragOrigin]);
+
   const [{ isDragging }, drag] = useDrag(() => ({
     type: DragTypes.PIECE,
-    item: piece.name,
+    item: () => {
+      return {
+        piece,
+        dragOrigin: dragOriginRef.current,
+      };
+    },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -24,12 +41,6 @@ const PiecePreview: React.FC<Props> = ({ piece }) => {
       setDragOrigin(null);
     },
   }));
-
-  const [dragOrigin, setDragOrigin] = React.useState<T_Pos | null>(null);
-
-  const updateDragOrigin = (origin: T_Pos | null): void => {
-    setDragOrigin(origin);
-  };
 
   //TODO: Add onClick to cells to grab the cell that was selected
   //Then, onHover we can calculate if it is a valid placement based
