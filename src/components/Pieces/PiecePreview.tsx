@@ -14,39 +14,30 @@ type Props = {
 
 //TODO: Find a way to do this with renderBoard
 const PiecePreview: React.FC<Props> = ({ piece, index }) => {
-  //FIXME: this fuckery with refs is a hacky workaround to access
-  //the dragOrigin inside of useDrag. If we try to access it directly
-  //we end up with a stale closure value >:()
   const [dragOrigin, setDragOrigin] = React.useState<T_Pos | null>(null);
   const updateDragOrigin = (origin: T_Pos | null): void => {
     setDragOrigin(origin);
   };
-  const dragOriginRef = React.useRef(dragOrigin);
 
-  React.useEffect(() => {
-    dragOriginRef.current = dragOrigin;
-  }, [dragOrigin]);
-
-  React.useEffect(() => {
-    console.log("piecePreview!!!!");
-    return () => {
-      console.log("goodbye");
-    };
-  }, []);
-
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: DragTypes.PIECE,
-    item: () => {
-      return {
-        piece,
-        dragOrigin: dragOriginRef.current,
-        index,
-      };
-    },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
+  const [{ isDragging }, drag] = useDrag(
+    () => ({
+      type: DragTypes.PIECE,
+      item: () => {
+        return {
+          piece,
+          dragOrigin,
+          index,
+        };
+      },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+      end: (item, monitor) => {
+        // setDragOrigin(null);
+      },
     }),
-  }));
+    [piece, dragOrigin, index]
+  );
 
   return (
     <div ref={drag}>

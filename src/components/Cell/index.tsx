@@ -16,33 +16,32 @@ type T_Item = { piece: T_PieceData; dragOrigin?: T_Pos; index: number };
 
 const Cell: React.FC<Props> = ({ children, onClick, pos }) => {
   const { playPiece } = React.useContext(BoardContext);
-  const playPieceRef = React.useRef(playPiece);
-  React.useEffect(() => {
-    playPieceRef.current = playPiece;
-  }, [playPiece]);
 
-  const [collected, drop] = useDrop(() => ({
-    accept: DragTypes.PIECE,
-    collect: (monitor) => ({
-      isHovering: monitor.isOver(),
+  const [collected, drop] = useDrop(
+    () => ({
+      accept: DragTypes.PIECE,
+      collect: (monitor) => ({
+        isHovering: monitor.isOver(),
+      }),
+      drop: (item: T_Item, monitor) => {
+        const dragOrigin = item.dragOrigin as T_Pos;
+        //offset pos by dragOrigin to find actual drop origin target
+        const dropOrigin: T_Pos = [
+          pos[0] - dragOrigin[0],
+          pos[1] - dragOrigin[1],
+        ];
+        //TODO: fix the way item is typed so we don't need this dumb check
+        if (playPiece) {
+          playPiece(dropOrigin, item.piece, item.index);
+        }
+      },
+      canDrop: (item, monitor) => {
+        //TODO: call some func here passed down from Board to determine if valid placement
+        return true;
+      },
     }),
-    drop: (item: T_Item, monitor) => {
-      console.log("drop", item);
-      const dragOrigin = item.dragOrigin as T_Pos;
-      //offset pos by dragOrigin to find actual drop origin target
-      const dropOrigin: T_Pos = [
-        pos[0] - dragOrigin[0],
-        pos[1] - dragOrigin[1],
-      ];
-      if (playPieceRef.current) {
-        playPieceRef.current(dropOrigin, item.piece, item.index);
-      }
-    },
-    canDrop: (item, monitor) => {
-      //TODO: call some func here passed down from Board to determine if valid placement
-      return true;
-    },
-  }));
+    [playPiece]
+  );
 
   return (
     <div

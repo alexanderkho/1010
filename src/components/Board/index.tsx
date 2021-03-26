@@ -45,7 +45,6 @@ const Board: React.FC = () => {
 
   //TODO: this + addPiece is !DRY AKA WET
   const isValidPlacement = (piece: T_BitMap, origin: T_Pos) => {
-    console.log("yo heres the board", board);
     const [originRow, originCol] = origin;
     for (let i = 0; i < piece.length; i++) {
       for (let j = 0; j < piece[i].length; j++) {
