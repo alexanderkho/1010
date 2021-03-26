@@ -11,7 +11,7 @@ const renderBoard = (
       {board.map((row, i) => (
         <div className="row" key={i}>
           {row.map((cell, j) => (
-            <Cell onClick={() => onClick(cell.pos)} key={j}>
+            <Cell onClick={() => onClick(cell.pos)} key={j} pos={[i, j]}>
               {cell.piece ? <Block piece={cell.piece} /> : null}
             </Cell>
           ))}

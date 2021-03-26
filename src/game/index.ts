@@ -19,7 +19,7 @@ type T_PieceData = {
 
 type T_QUEUE = T_PieceData[];
 
-const usePieceQueue = (): [T_QUEUE, () => void] => {
+const usePieceQueue = (): [T_QUEUE, () => void, (i: number) => void] => {
   const [queue, setQueue] = React.useState<T_QUEUE>([]);
   React.useEffect(() => {
     if (!queue.length) {
@@ -45,7 +45,15 @@ const usePieceQueue = (): [T_QUEUE, () => void] => {
       return newQueue;
     });
 
-  return [queue, next];
+  const removePiece = (i: number) => {
+    setQueue((prev) => {
+      const newQueue = [...prev];
+      newQueue.splice(i, 1);
+      return newQueue;
+    });
+  };
+
+  return [queue, next, removePiece];
 };
 
 const DragTypes = {

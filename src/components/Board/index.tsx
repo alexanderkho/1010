@@ -4,13 +4,19 @@ import { T_Pos } from "./BoardTypes";
 import { T_BitMap, PiecePreview } from "../Pieces";
 import initBoard from "./initBoard";
 import boardReducer, { addPiece, clearRow, clearCol } from "./state";
-import { usePieceQueue } from "../../game";
+import { T_PieceData, usePieceQueue } from "../../game";
 import "./Board.css";
 import renderBoard from "./renderBoard";
 
+type T_BoardContext = {
+  playPiece?: (o: T_Pos, p: T_PieceData, i: number) => void;
+};
+
+const BoardContext = React.createContext<T_BoardContext>({});
+
 const Board: React.FC = () => {
   const [board, dispatch] = React.useReducer(boardReducer, initBoard());
-  const [queue, next] = usePieceQueue();
+  const [queue, next, removePiece] = usePieceQueue();
 
   //check for filled lines
   React.useEffect(() => {
@@ -39,6 +45,7 @@ const Board: React.FC = () => {
 
   //TODO: this + addPiece is !DRY AKA WET
   const isValidPlacement = (piece: T_BitMap, origin: T_Pos) => {
+    console.log("yo heres the board", board);
     const [originRow, originCol] = origin;
     for (let i = 0; i < piece.length; i++) {
       for (let j = 0; j < piece[i].length; j++) {
@@ -70,22 +77,41 @@ const Board: React.FC = () => {
     next();
   };
 
-  const rQueue = [...queue].reverse();
+  const playPieceDrop = (origin: T_Pos, piece: T_PieceData, index: number) => {
+    const { bitmap, name } = piece;
+    if (!isValidPlacement(bitmap, origin)) {
+      return;
+    }
+    const [originRow, originCol] = origin;
+    for (let i = 0; i < bitmap.length; i++) {
+      for (let j = 0; j < bitmap[i].length; j++) {
+        if (bitmap[i][j]) {
+          dispatch(addPiece(name, [i + originRow, j + originCol]));
+        }
+      }
+    }
+    removePiece(index);
+  };
+
+  // const rQueue = [...queue].reverse();
   return (
-    <div className="board">
-      <div>{renderBoard(board, playPiece)}</div>
-      {rQueue && (
-        <div className="piece-queue">
-          <p>Current queue</p>
-          <ul>
-            {rQueue.map((p, i) => (
-              <PiecePreview piece={p} key={i} />
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+    <BoardContext.Provider value={{ playPiece: playPieceDrop }}>
+      <div className="board">
+        <div>{renderBoard(board, playPiece)}</div>
+        {queue && (
+          <div className="piece-queue">
+            <p>Current queue</p>
+            <ul>
+              {queue.map((p, i) => (
+                <PiecePreview piece={p} key={i} index={i} />
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </BoardContext.Provider>
   );
 };
 
 export default Board;
+export { BoardContext };
