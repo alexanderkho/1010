@@ -1,12 +1,14 @@
 import * as React from "react";
 
-import { T_Pos } from "./BoardTypes";
+import { T_Cell, T_Pos } from "./BoardTypes";
 import { T_BitMap, PiecePreview } from "../Pieces";
 import initBoard from "./initBoard";
 import boardReducer, { addPiece, clearRow, clearCol } from "./state";
 import { T_PieceData, usePieceQueue } from "../../game";
 import "./Board.css";
-import renderBoard from "./renderBoard";
+import renderGrid from "./renderGrid";
+import Cell from "../Cell";
+import Block from "../Block";
 
 type T_BoardContext = {
   playPiece?: (o: T_Pos, p: T_PieceData, i: number) => void;
@@ -16,8 +18,9 @@ const BoardContext = React.createContext<T_BoardContext>({});
 
 const Board: React.FC = () => {
   const [board, dispatch] = React.useReducer(boardReducer, initBoard());
-  const [queue, next, removePiece] = usePieceQueue();
+  const [queue, removeFromQueue] = usePieceQueue(); //maybe rename to something like useGameState
 
+  //TODO: can this be encapsulated in usePieceQueue()?
   //check for filled lines
   React.useEffect(() => {
     const rows = new Array(board.length).fill(true);
@@ -43,7 +46,8 @@ const Board: React.FC = () => {
     });
   }, [board]);
 
-  //TODO: this + addPiece is !DRY AKA WET
+  //TODO: this + playPiece is !DRY
+  //maybe define a func to loop over board and run a callback on each cell
   const isValidPlacement = (piece: T_BitMap, origin: T_Pos) => {
     const [originRow, originCol] = origin;
     for (let i = 0; i < piece.length; i++) {
@@ -59,24 +63,7 @@ const Board: React.FC = () => {
     return true;
   };
 
-  const playPiece = (origin: T_Pos) => {
-    const nextPiece = queue[queue.length - 1];
-    const { bitmap } = nextPiece;
-    if (!isValidPlacement(bitmap, origin)) {
-      return;
-    }
-    const [originRow, originCol] = origin;
-    for (let i = 0; i < bitmap.length; i++) {
-      for (let j = 0; j < bitmap[i].length; j++) {
-        if (bitmap[i][j]) {
-          dispatch(addPiece(nextPiece.name, [i + originRow, j + originCol]));
-        }
-      }
-    }
-    next();
-  };
-
-  const playPieceDrop = (origin: T_Pos, piece: T_PieceData, index: number) => {
+  const playPiece = (origin: T_Pos, piece: T_PieceData, index: number) => {
     const { bitmap, name } = piece;
     if (!isValidPlacement(bitmap, origin)) {
       return;
@@ -89,17 +76,21 @@ const Board: React.FC = () => {
         }
       }
     }
-    removePiece(index);
+    removeFromQueue(index);
   };
 
-  // const rQueue = [...queue].reverse();
+  const renderBoardCell = (cell: T_Cell, pos: T_Pos): JSX.Element => {
+    return (
+      <Cell pos={pos}>{cell.piece ? <Block piece={cell.piece} /> : null}</Cell>
+    );
+  };
+
   return (
-    <BoardContext.Provider value={{ playPiece: playPieceDrop }}>
+    <BoardContext.Provider value={{ playPiece }}>
       <div className="board">
-        <div>{renderBoard(board, playPiece)}</div>
+        <div>{renderGrid(board, renderBoardCell)}</div>
         {queue && (
           <div className="piece-queue">
-            <p>Current queue</p>
             <ul>
               {queue.map((p, i) => (
                 <PiecePreview piece={p} key={i} index={i} />

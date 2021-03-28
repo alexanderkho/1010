@@ -19,12 +19,14 @@ type T_PieceData = {
 
 type T_QUEUE = T_PieceData[];
 
-const usePieceQueue = (): [T_QUEUE, () => void, (i: number) => void] => {
+const usePieceQueue = (): [T_QUEUE, (i: number) => void] => {
   const [queue, setQueue] = React.useState<T_QUEUE>([]);
   React.useEffect(() => {
     if (!queue.length) {
       const newQueue: T_QUEUE = [];
       for (let i = 0; i < QUEUE_SIZE; i++) {
+        //should probably export all this initilization as a function from Pieces
+        //e.g. newQueue.push(new Piece())
         const rotation = Math.floor(Math.random() * 4) as T_Rotation;
         const pieceName = getRandomPiece();
         const piece: T_PieceData = {
@@ -38,13 +40,6 @@ const usePieceQueue = (): [T_QUEUE, () => void, (i: number) => void] => {
     }
   }, [queue]);
 
-  const next = () =>
-    setQueue((prev) => {
-      const newQueue: T_QUEUE = [...prev];
-      newQueue.pop();
-      return newQueue;
-    });
-
   const removePiece = (i: number) => {
     setQueue((prev) => {
       const newQueue = [...prev];
@@ -53,7 +48,7 @@ const usePieceQueue = (): [T_QUEUE, () => void, (i: number) => void] => {
     });
   };
 
-  return [queue, next, removePiece];
+  return [queue, removePiece];
 };
 
 const DragTypes = {

@@ -37,6 +37,7 @@ const Cell: React.FC<Props> = ({ children, onClick, pos }) => {
       },
       canDrop: (item, monitor) => {
         //TODO: call some func here passed down from Board to determine if valid placement
+        //maybe check validPlacements dictonary`
         return true;
       },
     }),

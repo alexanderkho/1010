@@ -6,13 +6,13 @@ import PreviewCell from "../Cell/PreviewCell";
 import Block from "../Block";
 import "./PiecePreview.css";
 import { T_Pos } from "../Board/BoardTypes";
+import renderGrid from "../Board/renderGrid";
 
 type Props = {
   piece: T_PieceData;
   index: number;
 };
 
-//TODO: Find a way to do this with renderBoard
 const PiecePreview: React.FC<Props> = ({ piece, index }) => {
   const [dragOrigin, setDragOrigin] = React.useState<T_Pos | null>(null);
   const updateDragOrigin = (origin: T_Pos | null): void => {
@@ -39,23 +39,15 @@ const PiecePreview: React.FC<Props> = ({ piece, index }) => {
     [piece, dragOrigin, index]
   );
 
-  return (
-    <div ref={drag}>
-      {piece.bitmap.map((row, i) => (
-        <div className="row" key={i}>
-          {row.map((cell, j) => (
-            <PreviewCell
-              key={j}
-              pos={[i, j]}
-              updateDragOrigin={updateDragOrigin}
-            >
-              {cell ? <Block piece={piece.name} /> : null}
-            </PreviewCell>
-          ))}
-        </div>
-      ))}
-    </div>
-  );
+  const renderPreviewCell = (cell: 0 | 1, pos: T_Pos): JSX.Element => {
+    return (
+      <PreviewCell pos={pos} updateDragOrigin={updateDragOrigin}>
+        {cell ? <Block piece={piece.name} /> : null}
+      </PreviewCell>
+    );
+  };
+
+  return <div ref={drag}>{renderGrid(piece.bitmap, renderPreviewCell)}</div>;
 };
 
 export default PiecePreview;
