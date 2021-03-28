@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { T_Cell, T_Pos } from "./BoardTypes";
-import { T_BitMap, PiecePreview } from "../Pieces";
+import { T_BitMap } from "../Pieces";
 import initBoard from "./initBoard";
 import boardReducer, { addPiece, clearRow, clearCol } from "./state";
 import { T_PieceData, usePieceQueue } from "../../game";
@@ -9,6 +9,7 @@ import "./Board.css";
 import renderGrid from "./renderGrid";
 import Cell from "../Cell";
 import Block from "../Block";
+import PieceQueue from "../PieceQueue";
 
 type T_BoardContext = {
   playPiece?: (o: T_Pos, p: T_PieceData, i: number) => void;
@@ -89,15 +90,7 @@ const Board: React.FC = () => {
     <BoardContext.Provider value={{ playPiece }}>
       <div className="board">
         <div>{renderGrid(board, renderBoardCell)}</div>
-        {queue && (
-          <div className="piece-queue">
-            <ul>
-              {queue.map((p, i) => (
-                <PiecePreview piece={p} key={i} index={i} />
-              ))}
-            </ul>
-          </div>
-        )}
+        {queue && <PieceQueue queue={queue} />}
       </div>
     </BoardContext.Provider>
   );

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useDrop } from "react-dnd";
+import { DropTargetMonitor, useDrop } from "react-dnd";
 import { DragTypes, T_PieceData } from "../../game";
 import { BoardContext } from "../Board";
 import { T_Pos } from "../Board/BoardTypes";
@@ -7,23 +7,21 @@ import { T_Pos } from "../Board/BoardTypes";
 import "./Cell.css";
 
 type Props = {
-  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   pos: T_Pos;
 };
 
-//TODO: this should NOT be defined here
-type T_Item = { piece: T_PieceData; dragOrigin?: T_Pos; index: number };
+type T_DragItem = { piece: T_PieceData; dragOrigin?: T_Pos; index: number };
 
-const Cell: React.FC<Props> = ({ children, onClick, pos }) => {
+const Cell: React.FC<Props> = ({ children, pos }) => {
   const { playPiece } = React.useContext(BoardContext);
 
   const [collected, drop] = useDrop(
     () => ({
       accept: DragTypes.PIECE,
-      collect: (monitor) => ({
+      collect: (monitor: DropTargetMonitor) => ({
         isHovering: monitor.isOver(),
       }),
-      drop: (item: T_Item, monitor) => {
+      drop: (item: T_DragItem, monitor: DropTargetMonitor) => {
         const dragOrigin = item.dragOrigin as T_Pos;
         //offset pos by dragOrigin to find actual drop origin target
         const dropOrigin: T_Pos = [
@@ -49,7 +47,6 @@ const Cell: React.FC<Props> = ({ children, onClick, pos }) => {
       //TODO: instead of this check on collected.isHovering, we should recieve an activeCell prop
       //from Board which is true if this cell is part of the currently hovering piece AND that piece is a valid placement
       className={`cell ${collected.isHovering ? "hover" : ""}`}
-      onClick={onClick}
       ref={drop}
     >
       {children}

@@ -2,9 +2,9 @@ import * as React from "react";
 import { useDrag } from "react-dnd";
 
 import { T_PieceData, DragTypes } from "../../game";
-import PreviewCell from "../Cell/PreviewCell";
+import PreviewCell from "./PreviewCell";
 import Block from "../Block";
-import "./PiecePreview.css";
+import "./PieceQueue.css";
 import { T_Pos } from "../Board/BoardTypes";
 import renderGrid from "../Board/renderGrid";
 
@@ -47,7 +47,11 @@ const PiecePreview: React.FC<Props> = ({ piece, index }) => {
     );
   };
 
-  return <div ref={drag}>{renderGrid(piece.bitmap, renderPreviewCell)}</div>;
+  return (
+    <div className="piece-preview" ref={drag}>
+      {renderGrid(piece.bitmap, renderPreviewCell)}
+    </div>
+  );
 };
 
 export default PiecePreview;

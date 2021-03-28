@@ -1,9 +1,7 @@
-import PiecePreview from "./PiecePreview";
-
 const Pieces = {
   Square: "Square",
   Line: "Line",
-  RLeft: "RLeft",
+  LLeft: "LLeft",
 };
 
 type T_Piece = keyof typeof Pieces;
@@ -11,7 +9,7 @@ type T_Piece = keyof typeof Pieces;
 const Colors = {
   Square: "red",
   Line: "blue",
-  RLeft: "green",
+  LLeft: "green",
 };
 
 type T_BitMap = Array<Array<1 | 0>>;
@@ -23,7 +21,7 @@ const BM_Square: T_BitMap = [
 
 const BM_Line: T_BitMap = [[1], [1], [1], [1]];
 
-const BM_RLeft: T_BitMap = [
+const BM_LLeft: T_BitMap = [
   [1, 0],
   [1, 0],
   [1, 1],
@@ -32,7 +30,7 @@ const BM_RLeft: T_BitMap = [
 const BitMaps = {
   Square: BM_Square,
   Line: BM_Line,
-  RLeft: BM_RLeft,
+  LLeft: BM_LLeft,
 };
 
 type T_Rotation = 0 | 1 | 2 | 3;
@@ -63,5 +61,5 @@ const getRandomPiece = (): T_Piece => {
   return p;
 };
 
-export { Pieces, Colors, BitMaps, getRandomPiece, rotatePiece, PiecePreview };
+export { Pieces, Colors, BitMaps, getRandomPiece, rotatePiece };
 export type { T_Piece, T_BitMap, T_Rotation };
