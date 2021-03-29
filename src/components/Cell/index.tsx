@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DropTargetMonitor, useDrop } from "react-dnd";
-import { DragTypes, T_PieceData } from "../../game";
+import { DragTypes, Piece } from "../../game";
 import { BoardContext } from "../Board";
 import { T_Pos } from "../Board/BoardTypes";
 
@@ -10,7 +10,7 @@ type Props = {
   pos: T_Pos;
 };
 
-type T_DragItem = { piece: T_PieceData; dragOrigin?: T_Pos; index: number };
+type T_DragItem = { piece: Piece; dragOrigin?: T_Pos; index: number };
 
 const Cell: React.FC<Props> = ({ children, pos }) => {
   const { playPiece } = React.useContext(BoardContext);

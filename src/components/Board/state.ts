@@ -1,4 +1,4 @@
-import { T_Piece } from "../Pieces";
+import { Piece } from "../../game";
 import { T_Board, T_Pos, T_Row } from "./BoardTypes";
 
 const ADD_PIECE = "ADD_PIECE";
@@ -7,7 +7,7 @@ const CLEAR_COL = "CLEAR_COL";
 
 type T_AddPiece = {
   type: typeof ADD_PIECE;
-  pieceName: T_Piece;
+  piece: Piece;
   pos: T_Pos;
 };
 
@@ -23,10 +23,10 @@ type T_ClearCol = {
 
 type actionTypes = T_AddPiece | T_ClearRow | T_ClearCol;
 
-const addPiece = (pieceName: T_Piece, pos: T_Pos): T_AddPiece => {
+const addPiece = (piece: Piece, pos: T_Pos): T_AddPiece => {
   return {
     type: ADD_PIECE,
-    pieceName,
+    piece,
     pos,
   };
 };
@@ -50,13 +50,13 @@ const boardReducer = (state: T_Board, action: actionTypes): T_Board => {
   let newBoard: T_Board, newRow: T_Row;
   switch (action.type) {
     case ADD_PIECE:
-      const { pieceName, pos } = action;
+      const { piece, pos } = action;
       const [updateRow, updateCol] = pos;
       newBoard = [...state];
       newRow = [...state[updateRow]];
       newRow[updateCol] = {
         ...newRow[updateCol],
-        piece: pieceName,
+        piece: piece,
       };
       newBoard[updateRow] = newRow;
       return newBoard;

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useDrag } from "react-dnd";
 
-import { T_PieceData, DragTypes } from "../../game";
+import { DragTypes, Piece } from "../../game";
 import PreviewCell from "./PreviewCell";
 import Block from "../Block";
 import "./PieceQueue.css";
@@ -9,7 +9,7 @@ import { T_Pos } from "../Board/BoardTypes";
 import renderGrid from "../Board/renderGrid";
 
 type Props = {
-  piece: T_PieceData;
+  piece: Piece;
   index: number;
 };
 
@@ -42,7 +42,7 @@ const PiecePreview: React.FC<Props> = ({ piece, index }) => {
   const renderPreviewCell = (cell: 0 | 1, pos: T_Pos): JSX.Element => {
     return (
       <PreviewCell pos={pos} updateDragOrigin={updateDragOrigin}>
-        {cell ? <Block piece={piece.name} /> : null}
+        {cell ? <Block piece={piece} /> : null}
       </PreviewCell>
     );
   };

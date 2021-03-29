@@ -1,9 +1,9 @@
-import { T_Piece } from "../Pieces";
+import { Piece } from "../../game";
 
 type T_Pos = [number, number];
 
 type T_Cell = {
-  piece: T_Piece | null;
+  piece: Piece | null;
   pos: T_Pos;
 };
 

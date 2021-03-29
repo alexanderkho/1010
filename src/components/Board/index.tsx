@@ -1,10 +1,9 @@
 import * as React from "react";
 
 import { T_Cell, T_Pos } from "./BoardTypes";
-import { T_BitMap } from "../Pieces";
 import initBoard from "./initBoard";
 import boardReducer, { addPiece, clearRow, clearCol } from "./state";
-import { T_PieceData, usePieceQueue } from "../../game";
+import { usePieceQueue, T_BitMap, Piece } from "../../game";
 import "./Board.css";
 import renderGrid from "./renderGrid";
 import Cell from "../Cell";
@@ -12,7 +11,7 @@ import Block from "../Block";
 import PieceQueue from "../PieceQueue";
 
 type T_BoardContext = {
-  playPiece?: (o: T_Pos, p: T_PieceData, i: number) => void;
+  playPiece?: (o: T_Pos, p: Piece, i: number) => void;
 };
 
 const BoardContext = React.createContext<T_BoardContext>({});
@@ -64,8 +63,8 @@ const Board: React.FC = () => {
     return true;
   };
 
-  const playPiece = (origin: T_Pos, piece: T_PieceData, index: number) => {
-    const { bitmap, name } = piece;
+  const playPiece = (origin: T_Pos, piece: Piece, index: number) => {
+    const { bitmap } = piece;
     if (!isValidPlacement(bitmap, origin)) {
       return;
     }
@@ -73,7 +72,7 @@ const Board: React.FC = () => {
     for (let i = 0; i < bitmap.length; i++) {
       for (let j = 0; j < bitmap[i].length; j++) {
         if (bitmap[i][j]) {
-          dispatch(addPiece(name, [i + originRow, j + originCol]));
+          dispatch(addPiece(piece, [i + originRow, j + originCol]));
         }
       }
     }
