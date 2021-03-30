@@ -1,4 +1,4 @@
-import { getRandomPiece, Piece, T_BitMap } from "./Piece";
+import { getRandomPiece, Piece } from "./Piece";
 import { T_Board, T_Pos, T_Queue, T_Row } from "./BoardTypes";
 import initBoard from "./initBoard";
 

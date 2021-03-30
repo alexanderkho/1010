@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { T_Pos } from "../Board/BoardTypes";
+import { T_Pos } from "../../game";
 import "./PieceQueue.css";
 
 type Props = {

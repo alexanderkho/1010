@@ -1,11 +1,11 @@
 import * as React from "react";
 
-import { T_QUEUE } from "../../game";
+import { T_Queue } from "../../game";
 import PiecePreview from "./PiecePreview";
 import "./PieceQueue.css";
 
 type Props = {
-  queue: T_QUEUE;
+  queue: T_Queue;
 };
 
 const PieceQueue: React.FC<Props> = ({ queue }) => {

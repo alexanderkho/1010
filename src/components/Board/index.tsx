@@ -1,7 +1,6 @@
 import * as React from "react";
 
-import { T_Cell, T_Pos } from "./BoardTypes";
-import useGameState from "../../game/useGameState";
+import { useGameState, T_Cell, T_Pos } from "../../game";
 import "./Board.css";
 import renderGrid from "./renderGrid";
 import Cell from "../Cell";

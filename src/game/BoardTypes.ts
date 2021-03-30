@@ -13,4 +13,9 @@ type T_Board = Array<T_Row>;
 
 type T_Queue = Piece[];
 
+const DragTypes = {
+  PIECE: "piece",
+};
+
 export type { T_Cell, T_Row, T_Board, T_Pos, T_Queue };
+export { DragTypes };

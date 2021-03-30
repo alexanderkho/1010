@@ -1,11 +1,10 @@
 import * as React from "react";
 import { useDrag } from "react-dnd";
 
-import { DragTypes, Piece } from "../../game";
+import { DragTypes, Piece, T_Pos } from "../../game";
 import PreviewCell from "./PreviewCell";
 import Block from "../Block";
 import "./PieceQueue.css";
-import { T_Pos } from "../Board/BoardTypes";
 import renderGrid from "../Board/renderGrid";
 
 type Props = {
