@@ -13,25 +13,28 @@ type T_BoardContext = {
 const BoardContext = React.createContext<T_BoardContext>({});
 
 const Board: React.FC = () => {
-  const [{ queue, board }, playPiece] = useGameState();
+  const [{ queue, board, score }, playPiece] = useGameState();
 
   return (
-    <BoardContext.Provider value={{ playPiece }}>
-      <div className="board">
-        <div>
-          {board.map((row, i) => (
-            <div key={i} className="row">
-              {row.map((cell, j) => (
-                <Cell pos={[i, j]} key={j}>
-                  {cell.piece ? <Block piece={cell.piece} /> : null}
-                </Cell>
-              ))}
-            </div>
-          ))}
+    <div>
+      <p className="score">Current Score: {score}</p>
+      <BoardContext.Provider value={{ playPiece }}>
+        <div className="board">
+          <div>
+            {board.map((row, i) => (
+              <div key={i} className="row">
+                {row.map((cell, j) => (
+                  <Cell pos={[i, j]} key={j}>
+                    {cell.piece ? <Block piece={cell.piece} /> : null}
+                  </Cell>
+                ))}
+              </div>
+            ))}
+          </div>
+          {queue && <PieceQueue queue={queue} />}
         </div>
-        {queue && <PieceQueue queue={queue} />}
-      </div>
-    </BoardContext.Provider>
+      </BoardContext.Provider>
+    </div>
   );
 };
 

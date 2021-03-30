@@ -5,6 +5,7 @@ import initBoard from "./initBoard";
 type T_GameState = {
   board: T_Board;
   queue: T_Queue;
+  score: number;
 };
 
 const QUEUE_SIZE = 3;
@@ -92,7 +93,11 @@ const boardReducer = (state: T_GameState, action: actionTypes): T_GameState => {
       const { index } = action;
       newQueue = [...state.queue];
       newQueue.splice(index, 1);
-      return { board: newBoard, queue: newQueue };
+      return {
+        board: newBoard,
+        queue: newQueue,
+        score: state.score + piece.points,
+      };
     case CLEAR_ROW:
       newBoard = [...state.board];
       newRow = [...state.board[action.index]];
@@ -116,9 +121,10 @@ const boardReducer = (state: T_GameState, action: actionTypes): T_GameState => {
   }
 };
 
-const initialState = {
+const initialState: T_GameState = {
   board: initBoard(),
   queue: [],
+  score: 0,
 };
 
 export type { T_GameState };

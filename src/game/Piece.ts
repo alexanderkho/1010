@@ -15,20 +15,31 @@ class Piece {
   name: T_PieceName;
   color: string;
   bitmap: T_BitMap;
+  points: number;
 
   constructor(name: T_PieceName) {
     this.name = name;
     this.color = Piece.colors[name];
     this.bitmap = Piece.getRandomRotation(Piece.defaultBitmaps[name]);
+    this.points = Piece.pointMap[name];
   }
 
   private static colors: Record<T_PieceName, string> = {
-    Square_sm: "orange",
-    Square_md: "red",
+    Square_sm: "#d68427",
+    Square_md: "#e34086",
     Square_lg: "cornflowerblue",
-    Line: "blue",
-    LLeft: "green",
+    Line: "#2069e0",
+    LLeft: "#3dd966",
     LRight: "blueviolet",
+  };
+
+  private static pointMap: Record<T_PieceName, number> = {
+    Square_sm: 1,
+    Square_md: 4,
+    Square_lg: 9,
+    Line: 4,
+    LLeft: 4,
+    LRight: 4,
   };
 
   private static defaultBitmaps: Record<T_PieceName, T_BitMap> = {
