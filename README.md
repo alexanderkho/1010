@@ -1,14 +1,13 @@
 # 1010
 
-This project is meant to be a React clone of the popular mobile game [1010!](https://1010ga.me/). It is still very much a work in progress.
+A React clone of the popular mobile game [1010!](https://1010ga.me/), built with TypeScript + the React DnD library.
 
 ## TODO
 
-- Ability to drag and drop pieces
-- Ability to grab any piece from current queue
-- Add point tracking
-- Add more pieces
-- Improved design/styling
+- Game over condition
+- Better points system -- e.g. bonus points for multi-line clears
+- High score
+- Visual indication of whether hovering piece is a valid placement
 
 ## Running The App
 
