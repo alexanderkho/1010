@@ -30,7 +30,7 @@ const Cell: React.FC<Props> = ({ children, pos }) => {
         ];
         //TODO: fix the way item is typed so we don't need this dumb check
         if (playPiece) {
-          playPiece(dropOrigin, item.piece, item.index);
+          playPiece(item.index, dropOrigin);
         }
       },
       canDrop: (item, monitor) => {

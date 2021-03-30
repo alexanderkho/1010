@@ -1,4 +1,4 @@
-import { getRandomPiece, Piece } from "./Piece";
+import { getRandomPiece, Piece, T_BitMap } from "./Piece";
 import { T_Board, T_Pos, T_Queue, T_Row } from "./BoardTypes";
 import initBoard from "./initBoard";
 
@@ -10,23 +10,15 @@ type T_GameState = {
 const QUEUE_SIZE = 3;
 
 const ADD_PIECE = "ADD_PIECE";
-const PLAY_PIECE = "PLAY_PIECE";
 const CLEAR_ROW = "CLEAR_ROW";
 const CLEAR_COL = "CLEAR_COL";
 const RESET_QUEUE = "RESET_QUEUE";
-const REMOVE_FROM_QUEUE = "REMOVE_FROM_QUEUE";
 
 //TODO: is there a more sane way to type this
 type T_AddPiece = {
   type: typeof ADD_PIECE;
   piece: Piece;
-  pos: T_Pos;
-};
-
-type T_PlayPiece = {
-  type: typeof PLAY_PIECE;
-  piece: Piece;
-  pos: T_Pos;
+  origin: T_Pos;
   index: number;
 };
 
@@ -44,32 +36,13 @@ type T_ResetQueue = {
   type: typeof RESET_QUEUE;
 };
 
-type T_RemoveFromQueue = {
-  type: typeof REMOVE_FROM_QUEUE;
-  index: number;
-};
+type actionTypes = T_AddPiece | T_ClearRow | T_ClearCol | T_ResetQueue;
 
-type actionTypes =
-  | T_AddPiece
-  | T_PlayPiece
-  | T_ClearRow
-  | T_ClearCol
-  | T_ResetQueue
-  | T_RemoveFromQueue;
-
-const addPiece = (piece: Piece, pos: T_Pos): T_AddPiece => {
+const addPiece = (index: number, origin: T_Pos, piece: Piece): T_AddPiece => {
   return {
     type: ADD_PIECE,
     piece,
-    pos,
-  };
-};
-
-const playPiece = (piece: Piece, pos: T_Pos, index: number): T_PlayPiece => {
-  return {
-    type: PLAY_PIECE,
-    piece,
-    pos,
+    origin,
     index,
   };
 };
@@ -94,31 +67,33 @@ const resetQueue = (): T_ResetQueue => {
   };
 };
 
-const removeFromQueue = (index: number) => {
-  return {
-    type: REMOVE_FROM_QUEUE,
-    index,
-  };
-};
-
 //TODO: some of this logic could be cleaned up.
 const boardReducer = (state: T_GameState, action: actionTypes): T_GameState => {
   let newBoard: T_Board, newRow: T_Row, newQueue: T_Queue;
   switch (action.type) {
     case ADD_PIECE:
-      const { piece, pos } = action;
-      const [updateRow, updateCol] = pos;
-      newBoard = [...state.board];
-      newRow = [...state.board[updateRow]];
-      newRow[updateCol] = {
-        ...newRow[updateCol],
-        piece: piece,
-      };
-      newBoard[updateRow] = newRow;
-      return { ...state, board: newBoard };
-    case PLAY_PIECE:
-      //TODO
-      return state;
+      //add piece to board
+      const { piece, origin } = action;
+      const { bitmap } = piece;
+      const [originRow, originCol] = origin;
+      //hacky deep clone
+      newBoard = [...state.board].map((r) => [...r]);
+      for (let i = 0; i < bitmap.length; i++) {
+        for (let j = 0; j < bitmap[i].length; j++) {
+          if (bitmap[i][j]) {
+            newBoard[i + originRow][j + originCol] = {
+              ...newBoard[i][j],
+              piece,
+            };
+          }
+        }
+      }
+
+      //remove piece from queue
+      const { index } = action;
+      newQueue = [...state.queue];
+      newQueue.splice(index, 1);
+      return { board: newBoard, queue: newQueue };
     case CLEAR_ROW:
       newBoard = [...state.board];
       newRow = [...state.board[action.index]];
@@ -137,11 +112,6 @@ const boardReducer = (state: T_GameState, action: actionTypes): T_GameState => {
         newQueue.push(getRandomPiece());
       }
       return { ...state, queue: newQueue };
-    case REMOVE_FROM_QUEUE:
-      const { index } = action;
-      newQueue = [...state.queue];
-      newQueue.splice(index, 1);
-      return { ...state, queue: newQueue };
     default:
       return state;
   }
@@ -154,13 +124,4 @@ const initialState = {
 
 export type { T_GameState };
 
-export {
-  addPiece,
-  playPiece,
-  clearRow,
-  clearCol,
-  resetQueue,
-  removeFromQueue,
-  boardReducer,
-  initialState,
-};
+export { addPiece, clearRow, clearCol, resetQueue, boardReducer, initialState };
