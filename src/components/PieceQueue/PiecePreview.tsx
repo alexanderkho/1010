@@ -5,7 +5,6 @@ import { DragTypes, Piece, T_Pos } from "../../game";
 import PreviewCell from "./PreviewCell";
 import Block from "../Block";
 import "./PieceQueue.css";
-import renderGrid from "../Board/renderGrid";
 
 type Props = {
   piece: Piece;
@@ -38,17 +37,21 @@ const PiecePreview: React.FC<Props> = ({ piece, index }) => {
     [piece, dragOrigin, index]
   );
 
-  const renderPreviewCell = (cell: 0 | 1, pos: T_Pos): JSX.Element => {
-    return (
-      <PreviewCell pos={pos} updateDragOrigin={updateDragOrigin}>
-        {cell ? <Block piece={piece} /> : null}
-      </PreviewCell>
-    );
-  };
-
   return (
     <div className="piece-preview" ref={drag}>
-      {renderGrid(piece.bitmap, renderPreviewCell)}
+      {piece.bitmap.map((row, i) => (
+        <div key={i} className="row">
+          {row.map((cell, j) => (
+            <PreviewCell
+              pos={[i, j]}
+              updateDragOrigin={updateDragOrigin}
+              key={j}
+            >
+              {cell ? <Block piece={piece} /> : null}
+            </PreviewCell>
+          ))}
+        </div>
+      ))}
     </div>
   );
 };

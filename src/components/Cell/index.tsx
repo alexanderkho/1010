@@ -2,7 +2,7 @@ import * as React from "react";
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { DragTypes, Piece } from "../../game";
 import { BoardContext } from "../Board";
-import { T_Pos } from "../Board/BoardTypes";
+import { T_Pos } from "../../game";
 
 import "./Cell.css";
 

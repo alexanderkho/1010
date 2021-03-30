@@ -67,7 +67,6 @@ const resetQueue = (): T_ResetQueue => {
   };
 };
 
-//TODO: some of this logic could be cleaned up.
 const boardReducer = (state: T_GameState, action: actionTypes): T_GameState => {
   let newBoard: T_Board, newRow: T_Row, newQueue: T_Queue;
   switch (action.type) {
