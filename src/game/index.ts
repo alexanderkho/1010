@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Piece, getRandomPiece, T_BitMap } from "./Pieces";
+import { Piece, getRandomPiece, T_BitMap } from "./Piece";
 
 const QUEUE_SIZE = 3;
 
