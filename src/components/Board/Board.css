@@ -15,9 +15,37 @@
   padding: 2px 8px;
 }
 
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 75%;
+  margin-left: 12.5%;
+}
+
 .score {
   font-family: "Courier New", Courier, monospace;
   font-size: 40px;
   font-weight: 800;
   color: #39ff14;
+}
+
+.new-game-btn {
+  background: #6140d6;
+  border-radius: 10px;
+  border: 0;
+  outline: 0;
+  font-family: "Courier New", Courier, monospace;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  padding: 15px 20px;
+}
+
+.new-game-btn:hover {
+  cursor: pointer;
+}
+
+.new-game-btn:active {
+  background-color: #8b6ef0;
 }

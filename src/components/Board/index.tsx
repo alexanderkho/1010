@@ -13,11 +13,16 @@ type T_BoardContext = {
 const BoardContext = React.createContext<T_BoardContext>({});
 
 const Board: React.FC = () => {
-  const [{ queue, board, score }, playPiece] = useGameState();
+  const [{ queue, board, score }, playPiece, newGame] = useGameState();
 
   return (
     <div>
-      <p className="score">Current Score: {score}</p>
+      <div className="game-info">
+        <p className="score">Current Score: {score}</p>
+        <button className="new-game-btn" onClick={newGame}>
+          New Game
+        </button>
+      </div>
       <BoardContext.Provider value={{ playPiece }}>
         <div className="board">
           <div>

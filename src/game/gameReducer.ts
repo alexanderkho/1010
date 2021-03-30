@@ -14,6 +14,7 @@ const ADD_PIECE = "ADD_PIECE";
 const CLEAR_ROW = "CLEAR_ROW";
 const CLEAR_COL = "CLEAR_COL";
 const RESET_QUEUE = "RESET_QUEUE";
+const NEW_GAME = "NEW_GAME";
 
 //TODO: is there a more sane way to type this
 type T_AddPiece = {
@@ -37,7 +38,16 @@ type T_ResetQueue = {
   type: typeof RESET_QUEUE;
 };
 
-type actionTypes = T_AddPiece | T_ClearRow | T_ClearCol | T_ResetQueue;
+type T_NewGame = {
+  type: typeof NEW_GAME;
+};
+
+type actionTypes =
+  | T_AddPiece
+  | T_ClearRow
+  | T_ClearCol
+  | T_ResetQueue
+  | T_NewGame;
 
 const addPiece = (index: number, origin: T_Pos, piece: Piece): T_AddPiece => {
   return {
@@ -65,6 +75,12 @@ const clearCol = (index: number): T_ClearCol => {
 const resetQueue = (): T_ResetQueue => {
   return {
     type: RESET_QUEUE,
+  };
+};
+
+const newGame = (): T_NewGame => {
+  return {
+    type: NEW_GAME,
   };
 };
 
@@ -116,6 +132,8 @@ const boardReducer = (state: T_GameState, action: actionTypes): T_GameState => {
         newQueue.push(getRandomPiece());
       }
       return { ...state, queue: newQueue };
+    case NEW_GAME:
+      return initialState;
     default:
       return state;
   }
@@ -129,4 +147,12 @@ const initialState: T_GameState = {
 
 export type { T_GameState };
 
-export { addPiece, clearRow, clearCol, resetQueue, boardReducer, initialState };
+export {
+  addPiece,
+  clearRow,
+  clearCol,
+  resetQueue,
+  boardReducer,
+  initialState,
+  newGame,
+};

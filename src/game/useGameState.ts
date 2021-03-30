@@ -10,12 +10,17 @@ import {
   clearRow,
   clearCol,
   addPiece,
+  newGame,
 } from "./gameReducer";
 
 /**
  * Returns Board and a function to add a piece to board
  */
-const useGameState = (): [T_GameState, (i: number, o: T_Pos) => void] => {
+const useGameState = (): [
+  T_GameState,
+  (i: number, o: T_Pos) => void,
+  () => void
+] => {
   const [state, dispatch] = useReducer(boardReducer, initialState);
   const { board, queue } = state;
 
@@ -74,7 +79,9 @@ const useGameState = (): [T_GameState, (i: number, o: T_Pos) => void] => {
     dispatch(addPiece(index, origin, piece));
   };
 
-  return [state, playPiece];
+  const startNewGame = () => dispatch(newGame());
+
+  return [state, playPiece, startNewGame];
 };
 
 export default useGameState;
