@@ -19,8 +19,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 75%;
-  margin-left: 12.5%;
+  width: 80%;
+  margin-left: 10%;
 }
 
 .score {
@@ -48,4 +48,8 @@
 
 .new-game-btn:active {
   background-color: #8b6ef0;
+}
+
+.high-score {
+  color: #fff;
 }

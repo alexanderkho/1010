@@ -1,6 +1,7 @@
 import { getRandomPiece, Piece } from "./Piece";
 import { T_Board, T_Pos, T_Queue, T_Row } from "./BoardTypes";
 import initBoard from "./initBoard";
+import * as HighScore from "./HighScore";
 
 type T_GameState = {
   board: T_Board;
@@ -133,6 +134,9 @@ const boardReducer = (state: T_GameState, action: actionTypes): T_GameState => {
       }
       return { ...state, queue: newQueue };
     case NEW_GAME:
+      if (state.score > HighScore.get()) {
+        HighScore.set(state.score);
+      }
       return initialState;
     default:
       return state;

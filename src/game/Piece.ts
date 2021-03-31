@@ -2,9 +2,11 @@ const PieceNames = [
   "Square_sm",
   "Square_md",
   "Square_lg",
-  "Line",
-  "LLeft",
-  "LRight",
+  "Line_sm",
+  "Line_md",
+  "Line_lg",
+  "Corner_sm",
+  "Corner_lg",
 ] as const;
 type T_PieceName = typeof PieceNames[number];
 
@@ -28,18 +30,22 @@ class Piece {
     Square_sm: "#d68427",
     Square_md: "#e34086",
     Square_lg: "cornflowerblue",
-    Line: "#2069e0",
-    LLeft: "#3dd966",
-    LRight: "blueviolet",
+    Line_sm: "#2069e0",
+    Line_md: "#3dd966",
+    Line_lg: "blueviolet",
+    Corner_sm: "#e6e630",
+    Corner_lg: "#34e5eb",
   };
 
   private static pointMap: Record<T_PieceName, number> = {
     Square_sm: 1,
     Square_md: 4,
     Square_lg: 9,
-    Line: 4,
-    LLeft: 4,
-    LRight: 4,
+    Line_sm: 3,
+    Line_md: 4,
+    Line_lg: 5,
+    Corner_sm: 3,
+    Corner_lg: 5,
   };
 
   private static defaultBitmaps: Record<T_PieceName, T_BitMap> = {
@@ -53,16 +59,17 @@ class Piece {
       [1, 1, 1],
       [1, 1, 1],
     ],
-    Line: [[1], [1], [1], [1]],
-    LLeft: [
-      [1, 0],
-      [1, 0],
+    Line_sm: [[1, 1, 1]],
+    Line_md: [[1, 1, 1, 1]],
+    Line_lg: [[1, 1, 1, 1, 1]],
+    Corner_sm: [
       [1, 1],
+      [1, 0],
     ],
-    LRight: [
-      [0, 1],
-      [0, 1],
-      [1, 1],
+    Corner_lg: [
+      [1, 1, 1],
+      [1, 0, 0],
+      [1, 0, 0],
     ],
   };
 
